@@ -1,7 +1,7 @@
 import os
 from itertools import pairwise
 
-TEST_FILE = '''
+TEST_INPUT = '''
 7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
@@ -15,10 +15,11 @@ INPUT_FILE = f'{os.path.dirname(__file__)}/input'
 def parse_line(line):
   return [int(n) for n in line.split()]  
 
-def lines(filename_or_string, file=True):
-  if not file:
-    return (line.strip() for line in filename_or_string.split('\n') if line != '')
-  with open(filename_or_string) as input:
+def lines(string):
+  return (line.strip() for line in string.split('\n') if line != '')
+  
+def lines_from_file(filename):
+  with open(filename) as input:
     return (line.strip() for line in input.readlines())
   
 def within_interval(low, high, number):
@@ -44,7 +45,7 @@ def iter_skip_n(collection, n):
 # Now, the same rules apply as before, except if removing a single level
 # from an unsafe report would make it safe, the report instead counts as safe.
 
-# Definitely not the most efficient solution, but fors sure the fastest to write
+# Definitely not the most efficient solution, but for sure the fastest to write
 def is_safe_with_dampener(report):
   return any(is_safe(iter_skip_n(report, n)) for n in range(len(report)))
 
@@ -54,10 +55,10 @@ def part_2(lines):
   return len(safe_reports)
 
 # Solution
-print(part_1(lines(INPUT_FILE))) # 
-print(part_2(lines(INPUT_FILE))) # 
+print(part_1(lines_from_file(INPUT_FILE))) # 299
+print(part_2(lines_from_file(INPUT_FILE))) # 364
 
 # Tests
-assert part_1(lines(TEST_FILE, False)) == 2
-assert part_2(lines(TEST_FILE, False)) == 4
+assert part_1(lines(TEST_INPUT)) == 2
+assert part_2(lines(TEST_INPUT)) == 4
 
