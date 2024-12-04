@@ -30,10 +30,10 @@ def grid_from_file(filename):
   with open(filename) as input:
     return Grid(input.read())
 
-def gen_coords_in_direction(x,y,dx,dy,n):
+def gen_coords_in_direction(x, y, dx, dy, n):
   for _ in range(n):
-    y = y + dy
-    x = x + dx
+    y += dy
+    x += dx
     yield x, y
 
 DIRS = [
@@ -42,13 +42,13 @@ DIRS = [
   ( 1,-1),( 1, 0),(1 ,1),
 ]
 
-# X is at x,y
-def is_MAS_in_direction(grid, x,y, dx,dy):
+# with X at x,y
+def is_MAS_in_direction(grid, x, y, dx, dy):
   return ''.join(grid.get(xx,yy) for xx,yy in gen_coords_in_direction(x,y,dx,dy,3)) == 'MAS'
 
-# X is at x,y, find MAS in all directions
-def number_of_MASes_from_position(grid, x,y):
-  return sum(1 for dx, dy in DIRS if is_MAS_in_direction(grid, x,y, dx,dy))
+# with X at x,y count MASes in all directions
+def number_of_MASes_from_position(grid, x, y):
+  return sum(1 for dx, dy in DIRS if is_MAS_in_direction(grid,x,y,dx,dy))
 
 def part_1(grid):
   # at each X, look in all directions to see if theres a MAS
@@ -64,7 +64,7 @@ def part_1(grid):
 # .A.  .A.  .A.  .A.
 # S.S  M.S  S.M  M.M
 
-# A in x,y
+# with A at x,y
 def is_X_MAS(grid, x, y):
   return ({ grid.get(x-1, y-1), grid.get(x+1, y+1) } == {'M','S'} and
           { grid.get(x-1, y+1), grid.get(x+1, y-1) } == {'M','S'})
@@ -72,8 +72,8 @@ def is_X_MAS(grid, x, y):
 def part_2(grid):
   # we look at each A, so we can skip first and last rows and columns
   total = 0
-  for y in range(1,grid.height-1):
-    for x in range(1,grid.width-1):
+  for y in range(1, grid.height-1):
+    for x in range(1, grid.width-1):
       if grid.get(x,y) == 'A' and is_X_MAS(grid, x, y):
         total += 1
   return total
