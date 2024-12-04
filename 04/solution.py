@@ -59,14 +59,29 @@ def part_1(grid):
         total += number_of_MASes_from_position(grid, x,y)
   return total
 
+# All possible X-MAS:
+# M.M  M.S  S.M  S.S
+# .A.  .A.  .A.  .A.
+# S.S  M.S  S.M  M.M
+
+# A in x,y
+def is_X_MAS(grid, x, y):
+  return ({ grid.get(x-1, y-1), grid.get(x+1, y+1) } == {'M','S'} and
+          { grid.get(x-1, y+1), grid.get(x+1, y-1) } == {'M','S'})
+
 def part_2(grid):
-  pass
+  # we look at each A, so we can skip first and last rows and columns
+  total = 0
+  for y in range(1,grid.height-1):
+    for x in range(1,grid.width-1):
+      if grid.get(x,y) == 'A' and is_X_MAS(grid, x, y):
+        total += 1
+  return total
 
 # Solution
-print(part_1(grid_from_file(INPUT_FILE))) # 
-# print(part_2(grid_from_file(INPUT_FILE)))
+print(part_1(grid_from_file(INPUT_FILE))) # 2427
+print(part_2(grid_from_file(INPUT_FILE))) # 1900
 
 # Tests
 assert part_1(Grid(TEST_INPUT)) == 18
-# assert part_2(Grid(TEST_INPUT)) == 
-
+assert part_2(Grid(TEST_INPUT)) == 9
