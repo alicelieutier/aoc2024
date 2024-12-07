@@ -1,5 +1,4 @@
 import os
-from functools import cache
 
 TEST_INPUT = '''
 190: 10 19
