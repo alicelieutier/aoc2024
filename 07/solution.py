@@ -83,5 +83,6 @@ assert is_possible_with_concat(15666, (15,6,6,6)) == True
 assert is_possible_with_concat(7290, (6,8,6,15)) == True
 assert is_possible_with_concat(36, (1,2,3)) == True
 assert is_possible_with_concat(103, (5,2,3)) == True
+
 assert part_1(TEST_INPUT) == 3749
 assert part_2(TEST_INPUT) == 11387
