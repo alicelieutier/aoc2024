@@ -56,14 +56,14 @@ def part_2(string):
   for file_index, file_size in reversed(files):
     for free_space_i, (space_index, space_size) in enumerate(free_spaces):
       if space_index > file_index:
-        break
-      if space_size >= file_size:
+        break # only try to move file left
+      if space_size >= file_size: # space found!
         for i, j in zip(range(space_index, space_index + file_size), range(file_index, file_index + file_size)):
           memory[i], memory[j] = memory[j], memory[i]
+        # adjust free space
         free_spaces[free_space_i] = space_index + file_size, space_size - file_size
         break
   return checksum(memory)
-
 
 # Solution
 print(part_1(string_from_file(INPUT_FILE))) # 6299243228569
