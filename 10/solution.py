@@ -17,67 +17,46 @@ class TopoMap:
 
   def neighbours(self, pos):
     x,y = pos
-    for xx, yy in (x-1, y),(x+1, y), (x, y-1), (x, y+1):
-      yield (xx,yy)
+    yield (x-1, y)
+    yield (x+1, y)
+    yield (x, y-1)
+    yield (x, y+1)
 
   def trailheads(self):
     for y in range(self.height):
       for x in range(self.width):
-        if self.grid[y][x] == 0:
+        if self.get((x,y)) == 0:
           yield (x,y)
 
   def score(self, trailhead):
-    memo = {}
-
     def nines_reachable(pos):
-      if pos not in memo:
-        altitude = self.get(pos)
-        if altitude == 9:
-          memo[pos] = {pos}
-        else:
-          results = set()
-          for neighbour in self.neighbours(pos):
-            if self.get(neighbour) == altitude + 1:
-              results |= nines_reachable(neighbour)
-          memo[pos] = results
-      return memo[pos]
-
+      altitude = self.get(pos)
+      if altitude == 9:
+        return {pos}
+      results = set()
+      for neighbour in self.neighbours(pos):
+        if self.get(neighbour) == altitude + 1:
+          results |= nines_reachable(neighbour)
+      return results
+    
     return len(nines_reachable(trailhead))
   
-  def rating(self, trailhead):
-    memo = {}
-    def trails_from(pos):
-      if pos not in memo:
-        altitude = self.get(pos)
-        if altitude == 9:
-          memo[pos] = 1
-        else:
-          memo[pos] = sum(trails_from(neighbour) for neighbour in self.neighbours(pos) if self.get(neighbour) == altitude + 1)
-      return memo[pos]
-    return trails_from(trailhead)
-
-def parse_input(string):
-  return TopoMap(string)
+  def rating(self, pos):
+    altitude = self.get(pos)
+    if altitude == 9:
+      return 1
+    return sum(self.rating(neighbour) for neighbour in self.neighbours(pos) if self.get(neighbour) == altitude + 1)
 
 def string_from_file(filename):
   with open(filename) as input:
     return input.read()
-  
-# a hiking trail is any path that starts at height 0, ends at height 9,
-# and always increases by a height of exactly 1 at each step.
-# Hiking trails never include diagonal steps.
-# A trailhead's score is the number of 9-height positions
-# reachable from that trailhead via a hiking trail
-# What is the sum of the scores of all trailheads on your topographic map?
+
 def part_1(string):
-  topo_map = parse_input(string)
+  topo_map = TopoMap(string)
   return sum(topo_map.score(trailhead) for trailhead in topo_map.trailheads())
 
-
-# A trailhead's rating is the number trails that
-# start from that trailhead
 def part_2(string):
-  topo_map = parse_input(string)
+  topo_map = TopoMap(string)
   return sum(topo_map.rating(trailhead) for trailhead in topo_map.trailheads())
 
 # Solution
