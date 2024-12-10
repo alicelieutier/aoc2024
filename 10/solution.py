@@ -41,8 +41,20 @@ class TopoMap:
               results |= nines_reachable(neighbour)
           memo[pos] = results
       return memo[pos]
-    reachable_nines = nines_reachable(trailhead)
-    return len(reachable_nines)
+
+    return len(nines_reachable(trailhead))
+  
+  def rating(self, trailhead):
+    memo = {}
+    def trails_from(pos):
+      if pos not in memo:
+        altitude = self.get(pos)
+        if altitude == 9:
+          memo[pos] = 1
+        else:
+          memo[pos] = sum(trails_from(neighbour) for neighbour in self.neighbours(pos) if self.get(neighbour) == altitude + 1)
+      return memo[pos]
+    return trails_from(trailhead)
 
 def parse_input(string):
   return TopoMap(string)
@@ -61,12 +73,16 @@ def part_1(string):
   topo_map = parse_input(string)
   return sum(topo_map.score(trailhead) for trailhead in topo_map.trailheads())
 
+
+# A trailhead's rating is the number trails that
+# start from that trailhead
 def part_2(string):
-  pass
+  topo_map = parse_input(string)
+  return sum(topo_map.rating(trailhead) for trailhead in topo_map.trailheads())
 
 # Solution
 print(part_1(string_from_file(INPUT_FILE))) # 
-# print(part_2(string_from_file(INPUT_FILE))) # 
+print(part_2(string_from_file(INPUT_FILE))) # 
 
 # Tests
 TEST_1 = '''
@@ -101,4 +117,4 @@ assert TopoMap(TEST_1).score((0,0)) == 1
 assert TopoMap(TEST_2).score((3,0)) == 4
 
 assert part_1(TEST_INPUT) == 36
-
+assert part_2(TEST_INPUT) == 81  # 20, 24, 10, 4, 1, 4, 5, 8, and 5
