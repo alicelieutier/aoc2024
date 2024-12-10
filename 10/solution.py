@@ -60,8 +60,8 @@ def part_2(string):
   return sum(topo_map.rating(trailhead) for trailhead in topo_map.trailheads())
 
 # Solution
-print(part_1(string_from_file(INPUT_FILE))) # 
-print(part_2(string_from_file(INPUT_FILE))) # 
+print(part_1(string_from_file(INPUT_FILE))) # 794
+print(part_2(string_from_file(INPUT_FILE))) # 1706
 
 # Tests
 TEST_1 = '''
