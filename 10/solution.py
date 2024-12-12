@@ -23,10 +23,7 @@ class TopoMap:
     yield (x, y+1)
 
   def trailheads(self):
-    for y in range(self.height):
-      for x in range(self.width):
-        if self.get((x,y)) == 0:
-          yield (x,y)
+    return ((x,y) for y in range(self.height) for x in range(self.width) if self.get((x,y)) == 0)
 
   def score(self, trailhead):
     def nines_reachable(pos):
