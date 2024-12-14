@@ -77,5 +77,4 @@ Button B: X+27, Y+71
 Prize: X=18641, Y=10279
 '''
 
-# assert part_1(TEST_INPUT) == 480
-# assert part_2(TEST_INPUT) == 4
+assert part_1(TEST_INPUT) == 480
